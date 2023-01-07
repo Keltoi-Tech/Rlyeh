@@ -1,6 +1,6 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cthulhu html library",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DaniloHenrique/Fhtagn.git"
+    "url": "https://github.com/Keltoi-Tech/Rlyeh"
   },
   "keywords": [
     "Cthulhu",
@@ -20,7 +20,7 @@
   "author": "Keltoi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DaniloHenrique/Fhtagn/issues"
+    "url": "https://github.com/Keltoi-Tech/Rlyeh/issues"
   },
-  "homepage": "https://github.com/DaniloHenrique/Fhtagn#readme"
+  "homepage": "https://github.com/Keltoi-Tech/Rlyeh#readme"
 }
