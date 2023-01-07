@@ -1,0 +1,1 @@
+export const kek=(t='')=>t.replace(/[A-Z]/g,(m,i)=>i==0?m.toLowerCase():`-${m.toLowerCase()}`);

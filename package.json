@@ -1,0 +1,26 @@
+{
+  "name": "cthulhu-rlyeh",
+  "version": "1.0.1",
+  "description": "Cthulhu html library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaniloHenrique/Fhtagn.git"
+  },
+  "keywords": [
+    "Cthulhu",
+    "Rlyeh",
+    "HTML",
+    "JS",
+    "SPA"
+  ],
+  "author": "Keltoi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DaniloHenrique/Fhtagn/issues"
+  },
+  "homepage": "https://github.com/DaniloHenrique/Fhtagn#readme"
+}
