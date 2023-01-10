@@ -74,8 +74,9 @@ export class Cthulhu{
     }
 
     dispose(){
-        for (const [event,callback] of this.#events)
-            this.#element.removeEventListener(event,callback);
+        if (!!this.#events)
+            for (const [event,callback] of this.#events)
+                this.#element.removeEventListener(event,callback);
 
         const me = new Map(Object.entries(this));
 
