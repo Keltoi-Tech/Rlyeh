@@ -19,6 +19,10 @@ export class HtmlComponent extends HtmlMeta{
     connectedCallback(){
         this.generate();
     }
+
+    attributeChangedCallback(name,oldValue,newValue){
+        if (oldValue!=newValue)this[name]=newValue;
+    }
 }
 
 export const define=(type)=>{
