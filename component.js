@@ -7,6 +7,10 @@ export class HtmlComponent extends HtmlMeta{
         super();
     }
 
+    async onRoot(e,callback=async ()=>{}){
+        if (!!this.root)await callback(e);
+    }
+
     generate(){
         this.root = new Cthulhu(this.template);
         this.root.build(true).then(e=>this.element.appendChild(e));        
@@ -23,6 +27,7 @@ export class HtmlComponent extends HtmlMeta{
     attributeChangedCallback(name,oldValue,newValue){
         if (oldValue!=newValue)this[name]=newValue;
     }
+
 }
 
 export const define=(type)=>{
