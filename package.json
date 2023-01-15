@@ -1,6 +1,6 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "1.0.7",
+  "version": "1.1.1",
   "description": "Cthulhu html library",
   "main": "index.js",
   "scripts": {
