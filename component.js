@@ -7,10 +7,6 @@ export class HtmlComponent extends HtmlMeta{
         super();
     }
 
-    async onRoot(e,callback=async ()=>{}){
-        if (!!this.root)await callback(e);
-    }
-
     generate(){
         this.root = new Cthulhu(this.template);
         this.root.build(true).then(e=>this.element.appendChild(e));        
@@ -20,37 +16,55 @@ export class HtmlComponent extends HtmlMeta{
         this.root.dispose();
     }
 
-    connectedCallback(){
-        this.generate();
-    }
-
     attributeChangedCallback(name,oldValue,newValue){
-        if (oldValue!=newValue)this[name]=newValue;
+        if (oldValue!=newValue && !!this.attributes)
+            this.attributes[name](this.root,newValue);
     }
 
 }
 
-export const define=(type)=>{
+export const define=(type,emitter=undefined)=>{
     const name = kek(type.name);
-    if (customElements.get(name)===undefined)customElements.define(name,type);
+    if (type.__proto__.name=='HtmlComponent'){
+        if (customElements.get(name)===undefined)customElements.define(name,type);
+    }
+    else 
+    {
+        if (customElements.get(name)===undefined){
+            let o = type(emitter);
+            let att;
+
+            if (!!o.attributes){
+                att = o.attributes;
+                delete o.attributes
+            }
+
+            customElements.define(name,
+                class extends HtmlComponent{
+                    constructor(){
+                        super();
+                        this.template = o;
+                        this.generate();
+                    }
+
+                    static get observedAttributes(){
+                        return !!att?Object.keys(att):[];
+                    }
+
+                    attributes = !!att?att:undefined;
+                }
+            );
+        }
+    }
 }
+
 
 export const component = (func, param = null)=>{
     const name = kek(func.name);
     let elementInstance = customElements.get(name);
-    if (elementInstance===undefined){
-        customElements.define(name,
-        class extends HtmlComponent{
-            constructor(param = undefined){
-                super();
-                this.template = !!param?func(param):func();
-            }
-        });
-
-        elementInstance = customElements.get(name);
-    }
-
-    return new elementInstance(param);
+    return (elementInstance===undefined)
+        ?null
+        :new elementInstance(param);
 }
 
 export const trait = (func,param = null) =>{
