@@ -114,7 +114,7 @@ export class Cthulhu{
         if (name!=='') this.#element = document.createElement(kek(name));
 
         if (map.has('content')){
-            this.#content= map.get('content');
+            this.#content= o.content;
             this.#state.content= true;
             map.delete('content');
         }
@@ -162,46 +162,71 @@ export class Cthulhu{
         }
     }
 
-    async createChild(instance,compose=false){
-        const element = (instance instanceof Cthulhu)
-                            ?await instance.build(compose)
-                            :instance;
-        if (compose)this.#element.appendChild(element);
-    }
-
     async build(compose=false)
     {
-        if (this.#state.content){
-            this.#element.textContent = this.#content;
-            this.#state.content = false;
+        let state= this.#state;
+        let element = this.#element;
+        let content = this.#content;
+
+        if (state.content){
+            element.textContent = content;
+            state.content = false;
         }
 
-        for (const [key,value] of this.#state.attributes)
+        for (const [key,value] of state.attributes)
             if (value)this.conciliateAttributes(key);
 
-        for (const [key,value] of this.#state.events)
+        for (const [key,value] of state.events)
             if (value)this.conciliateEvents(key);
 
+        await this.buildDeep(compose);
+
+        return element;
+    }
+
+
+    async createChild(instance,compose=false){
+        return (instance instanceof Cthulhu)
+                    ?{
+                        element:await instance.build(compose),
+                        compose:compose
+                    }
+                    :{
+                        element:instance,
+                        compose:compose
+                    }
+    }
+
+    async buildDeep(compose=false){
         const me = new Map(Object.entries(this));
+
+        let promises = [];
+        let element = this.#element;
 
         for (const [prop,instance] of me){
             if (instance instanceof Array){
-                instance.forEach(async (i,index)=>{
-                    if (i instanceof Cthulhu || i instanceof HtmlMeta) {
-                        await this.createChild(i,compose);
-                    } else {
-                        this[prop][index] =new Cthulhu(i,prop);
-                        await this.createChild(this[prop][index],true);
-                    }
-                });
-            } else if(instance instanceof Cthulhu || instance instanceof HtmlMeta){
-                await this.createChild(instance,compose);
-            } else {
+                promises = promises.concat(
+                    instance.map((i,index)=>{
+                        if (i instanceof Cthulhu || i instanceof HtmlMeta){
+                            return this.createChild(i,compose);
+                        }
+                        else {
+                            this[prop][index] =new Cthulhu(i,prop);
+                            return this.createChild(this[prop][index],true);
+                        }
+                    })
+                );
+            }else if(instance instanceof Cthulhu || instance instanceof HtmlMeta)
+                promises.push(this.createChild(instance,compose));
+            else {
                 this[prop]=new Cthulhu(instance,prop);
-                await this.createChild(this[prop],true);
+                promises.push(this.createChild(this[prop],true));
             }
         }
-        
-        return this.#element;
+
+        (await Promise.all(promises))
+        .forEach(
+            resp=>{if (resp.compose)element.appendChild(resp.element)}
+        );
     }
 }

@@ -2,14 +2,16 @@ import { Cthulhu } from "./cthulhu";
 import { kek } from "./utils";
 import { HtmlMeta } from "./html-meta";
 
+export const cthulhu=(template={})=>new Cthulhu(template);
+
 export class HtmlComponent extends HtmlMeta{
-    constructor(){
+    constructor(root = new Cthulhu({})){
         super();
+        this.root = root;
     }
 
-    generate(){
-        this.root = new Cthulhu(this.template);
-        this.root.build(true).then(e=>this.element.appendChild(e));        
+    connectedCallback(){
+        this.root.build(true).then(e=>this.element.appendChild(e))
     }
 
     disconnectedCallback(){
@@ -23,7 +25,7 @@ export class HtmlComponent extends HtmlMeta{
 
 }
 
-export const define=(type,emitter=undefined)=>{
+export const define=(type,outer=undefined)=>{
     const name = kek(type.name);
     if (type.__proto__.name=='HtmlComponent'){
         if (customElements.get(name)===undefined)customElements.define(name,type);
@@ -31,20 +33,18 @@ export const define=(type,emitter=undefined)=>{
     else 
     {
         if (customElements.get(name)===undefined){
-            let o = type(emitter);
+            let template = type(outer);
             let att;
 
-            if (!!o.attributes){
-                att = o.attributes;
-                delete o.attributes
+            if (!!template.attributes){
+                att = template.attributes;
+                delete template.attributes
             }
 
             customElements.define(name,
                 class extends HtmlComponent{
                     constructor(){
-                        super();
-                        this.template = o;
-                        this.generate();
+                        super(cthulhu(template));
                     }
 
                     static get observedAttributes(){
@@ -69,5 +69,5 @@ export const component = (func, param = null)=>{
 
 export const trait = (func,param = null) =>{
     const name = kek(func.name);
-    return new Cthulhu(!!param?func(param):func(),name);
+    return cthulhu(!!param?func(param):func(),name);
 }

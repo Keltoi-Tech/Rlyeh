@@ -18,3 +18,5 @@ export const entry=(routing=new Routing())=>{
     let route = routing.to(window.location.pathname);
     view(route);
 }
+
+export const go=(routing=new Routing(),url='/')=>view(routing.to(url));

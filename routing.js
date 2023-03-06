@@ -42,6 +42,7 @@ export class Routing {
 
         if ('index' in route){
             history.pushState({state:'new'},'',path);
+            
             return {
                 index:route.index,
                 params:route.params,
