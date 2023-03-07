@@ -1,8 +1,14 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Cthulhu Javascript Library",
   "main": "index.js",
+  "author": "Keltoi",
+  "license": "MIT",
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/Keltoi-Tech/Rlyeh.git"
+  },  
   "scripts": {
     "test": "webpack serve",
     "build": "webpack --mode=production --node-env=production",
@@ -18,8 +24,6 @@
     "SPA",
     "ES6"
   ],
-  "author": "Keltoi",
-  "license": "LICENSE",
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
