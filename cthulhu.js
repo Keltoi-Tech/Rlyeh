@@ -1,5 +1,5 @@
-import { HtmlMeta } from "./html-meta";
-import { kek } from "./utils";
+import { HtmlMeta } from "./html-meta.js";
+import { kek } from "./utils.js";
 
 const fthagn=(e,prop)=>
     e instanceof Cthulhu || e instanceof HTMLElement

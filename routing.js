@@ -3,7 +3,7 @@ export class Routing {
         this.routes = routes;
     }
 
-    to=(path='/')=> {
+    to=(path='/',historic=true)=> {
         const tokenPath=path.split('/');
         let route={};
         let paramIndex = 0;
@@ -41,7 +41,7 @@ export class Routing {
         })
 
         if ('index' in route){
-            history.pushState({state:'new'},'',path);
+            if (historic) history.pushState({state:'new'},'',path);
             
             return {
                 index:route.index,

@@ -1,13 +1,16 @@
-import { Cthulhu } from "./cthulhu";
-import { kek } from "./utils";
-import { HtmlMeta } from "./html-meta";
+import { Cthulhu } from "./cthulhu.js";
+import { kek } from "./utils.js";
+import { HtmlMeta } from "./html-meta.js";
 
-export const cthulhu=(template={})=>new Cthulhu(template);
+export const cthulhu=(template={},name='')=>name==''?new Cthulhu(template):new Cthulhu(template,name);
 
 export class HtmlComponent extends HtmlMeta{
-    constructor(root = new Cthulhu({})){
+    constructor(template={}){
         super();
-        this.root = root;
+        if (!!template.attributes)
+            delete template.attributes;
+        
+        this.root = new Cthulhu(template);
     }
 
     connectedCallback(){
@@ -25,7 +28,7 @@ export class HtmlComponent extends HtmlMeta{
 
 }
 
-export const define=(type,outer=undefined)=>{
+export const define=(type)=>{
     const name = kek(type.name);
     if (type.__proto__.name=='HtmlComponent'){
         if (customElements.get(name)===undefined)customElements.define(name,type);
@@ -33,24 +36,24 @@ export const define=(type,outer=undefined)=>{
     else 
     {
         if (customElements.get(name)===undefined){
-            let template = type(outer);
+            /*let template = type(outer);
             let att;
 
             if (!!template.attributes){
                 att = template.attributes;
                 delete template.attributes
-            }
-
+            }*/
+            const att = type()?.attributes;
             customElements.define(name,
                 class extends HtmlComponent{
-                    constructor(){
-                        super(cthulhu(template));
+                    constructor(inject={}){
+                        super(type(inject));
                     }
 
                     static get observedAttributes(){
                         return !!att?Object.keys(att):[];
                     }
-
+                    
                     attributes = !!att?att:undefined;
                 }
             );

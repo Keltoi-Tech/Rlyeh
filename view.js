@@ -1,4 +1,4 @@
-import { Routing } from "./routing";
+import { Routing } from "./routing.js";
 
 export const head=(instance=async()=>{})=>instance().then(e=>document.head.appendChild(e));
 

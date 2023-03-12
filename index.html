@@ -4,10 +4,135 @@
         <meta charset="utf-8" />
         <title>Cthulhu!</title>
         <style>
+            *{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
             body{
                 margin: 0;
                 padding: 0;
             }
         </style>
+        <script type="module">
+            import {
+                kek,
+                cthulhu,
+                define,
+                trait,
+                component,
+                entry,
+                Routing
+            } from './index.js';
+
+            const headerCss = `
+                h2{
+                    background:black;
+                    color:white;
+                    padding:15px;
+                    margin:0;
+                }
+
+                hr{
+                    padding:0;
+                    margin:0;
+                    border:none;
+                    border-bottom:1px solid rgb(55,55,55);
+                }
+            `;
+
+            const appCss=`
+                test-header{
+                    background:black;
+
+                }
+            `;
+
+            const TestHeader=(content='')=>({
+                style:{
+                    content:headerCss
+                },
+                h2:{
+                    content:content
+                },
+                hr:{},
+                attributes:{
+                    text:(root,value)=>{
+                        root.h2.content=value;
+                        root.h2.build();
+                    }
+                }
+            })
+
+            const List=(li=[])=>({
+                ul:{
+                    li:li.map(l=>{
+                        console.log();
+                        return {content:l}
+                    })
+                }
+            });
+
+            const AppRef=()=>({
+                style:{
+                    content:'div{background:black;color:white}'
+                },
+                div:{
+                    h2:{
+                        content:'All tests complete. Keltoi tech - 2023.'
+                    }
+                }
+            })
+
+            const AppMain=(inject=undefined)=>({
+                style:{
+                    content:appCss
+                },
+                testHeader:{
+                    attributes:{
+                        text:inject?.header ?? ''
+                    },
+                    events:{
+                        click:()=>console.log(inject?.sub)
+                    }
+                },
+                list:trait(List,inject?.list)
+            })
+
+            define(TestHeader)
+            define(AppMain)
+            const list = [
+                'Css test',
+                'Attribute test',
+                'Trait test',
+                'Component test',
+            ];
+            const h = 'Tests - See your console to compare results';
+            const main = component(AppMain,{header:h,list:list});
+
+            document.addEventListener('DOMContentLoaded',()=>{
+                document.body.appendChild(main);
+
+                console.log(main.root)
+
+                console.log(`Css test => ${
+                    (main.root.style.element.innerHTML === appCss)
+                        ?'OK':'NOK'
+                }`)
+
+                console.log(`Attribute test => ${
+                    main.root.testHeader.element.root.h2.content === 'Tests - See your console to compare results'
+                        ?'OK':'NOK'
+                }`);
+
+                main.root.list.ul.li.map((li,i)=>li.content===list[i]).forEach(
+                    (ok,i)=>console.log(`Trait ${i} test => ${ok?'OK':'NOK'}`)
+                )
+
+                console.log(`Component test => ${
+                    main.root.testHeader.element.nodeName === kek('testHeader').toUpperCase()
+                        ?'OK':'NOK'
+                }`)
+            })
+        </script>
     </head>
 </html>
