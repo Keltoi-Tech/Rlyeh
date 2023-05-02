@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <base href="/">
         <meta charset="utf-8" />
         <title>Cthulhu!</title>
         <style>
@@ -16,6 +17,7 @@
         <script type="module">
             import {
                 kek,
+                importStyle,
                 cthulhu,
                 define,
                 trait,
@@ -24,33 +26,8 @@
                 Routing
             } from './index.js';
 
-            const headerCss = `
-                h2{
-                    background:black;
-                    color:white;
-                    padding:15px;
-                    margin:0;
-                }
-
-                hr{
-                    padding:0;
-                    margin:0;
-                    border:none;
-                    border-bottom:1px solid rgb(55,55,55);
-                }
-            `;
-
-            const appCss=`
-                test-header{
-                    background:black;
-
-                }
-            `;
-
             const TestHeader=(content='')=>({
-                style:{
-                    content:headerCss
-                },
+                css:importStyle('assets/header'),
                 h2:{
                     content:content
                 },
@@ -72,59 +49,45 @@
                 }
             });
 
-            const AppRef=()=>({
-                style:{
-                    content:'div{background:black;color:white}'
-                },
-                div:{
-                    h2:{
-                        content:'All tests complete. Keltoi tech - 2023.'
-                    }
-                }
-            })
-
-            const AppMain=(inject=undefined)=>({
-                style:{
-                    content:appCss
-                },
+            const AppMain=(s=undefined)=>({
+                inlineSheet:'ul{background:rgb(255,233,12)}',
                 testHeader:{
                     attributes:{
-                        text:inject?.header ?? ''
+                        text:s?.header() ?? ''
                     },
                     events:{
-                        click:()=>console.log(inject?.sub)
+                        click:()=>s?.sub('Click component test => OK')
                     }
                 },
-                list:trait(List,inject?.list)
+                list:trait(List,s?.list())
             })
 
-            define(TestHeader)
-            define(AppMain)
-            const list = [
-                'Css test',
-                'Attribute test',
-                'Trait test',
-                'Component test',
-            ];
-            const h = 'Tests - See your console to compare results';
-            const main = component(AppMain,{header:h,list:list});
+            const service={
+                sub:(a)=>console.log(a),
+                list:()=>[
+                    'Attribute test',
+                    'Trait test',
+                    'Component test',
+                ],
+                header:()=>'Tests - See your console to compare results'
+            }
+
+            define(TestHeader,'')
+            define(AppMain,service)
+
+            const main = component(AppMain);
 
             document.addEventListener('DOMContentLoaded',()=>{
                 document.body.appendChild(main);
 
                 console.log(main.root)
 
-                console.log(`Css test => ${
-                    (main.root.style.element.innerHTML === appCss)
-                        ?'OK':'NOK'
-                }`)
-
                 console.log(`Attribute test => ${
                     main.root.testHeader.element.root.h2.content === 'Tests - See your console to compare results'
                         ?'OK':'NOK'
                 }`);
 
-                main.root.list.ul.li.map((li,i)=>li.content===list[i]).forEach(
+                main.root.list.ul.li.map((li,i)=>li.content===service.list()[i]).forEach(
                     (ok,i)=>console.log(`Trait ${i} test => ${ok?'OK':'NOK'}`)
                 )
 

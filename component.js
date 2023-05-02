@@ -2,13 +2,35 @@ import { Cthulhu } from "./cthulhu.js";
 import { kek } from "./utils.js";
 import { HtmlMeta } from "./html-meta.js";
 
+const newCss=(css='')=>
+{
+    const sheet = new CSSStyleSheet
+    sheet.replaceSync(css);
+    return sheet;
+}
+
 export const cthulhu=(template={},name='')=>name==''?new Cthulhu(template):new Cthulhu(template,name);
 
 export class HtmlComponent extends HtmlMeta{
     constructor(template={}){
         super();
+
         if (!!template.attributes)
             delete template.attributes;
+
+        if (!!template.inlineSheet){
+            const sheet = newCss(template.inlineSheet);
+            this.element.adoptedStyleSheets=[sheet];
+            delete template.inlineSheet;
+        }
+
+        if (!!template.css){
+            template.css.then(css=>{
+                const sheet = newCss(css);
+                this.element.adoptedStyleSheets=[sheet];
+                delete template.css;
+            })
+        }
         
         this.root = new Cthulhu(template);
     }
@@ -22,13 +44,15 @@ export class HtmlComponent extends HtmlMeta{
     }
 
     attributeChangedCallback(name,oldValue,newValue){
-        if (oldValue!=newValue && !!this.attributes)
+        if (oldValue!=newValue && !!this.attributes){
             this.attributes[name](this.root,newValue);
+        }
+            
     }
 
 }
 
-export const define=(type)=>{
+export const define=(type,services={})=>{
     const name = kek(type.name);
     if (type.__proto__.name=='HtmlComponent'){
         if (customElements.get(name)===undefined)customElements.define(name,type);
@@ -36,25 +60,19 @@ export const define=(type)=>{
     else 
     {
         if (customElements.get(name)===undefined){
-            /*let template = type(outer);
-            let att;
-
-            if (!!template.attributes){
-                att = template.attributes;
-                delete template.attributes
-            }*/
-            const att = type()?.attributes;
+            const tpl = type(services);
+            const attr = tpl.attributes;
             customElements.define(name,
                 class extends HtmlComponent{
-                    constructor(inject={}){
-                        super(type(inject));
+                    constructor(){
+                        super(tpl);
                     }
 
                     static get observedAttributes(){
-                        return !!att?Object.keys(att):[];
+                        return !!attr?Object.keys(attr):[];
                     }
                     
-                    attributes = !!att?att:undefined;
+                    attributes = !!attr?attr:undefined;
                 }
             );
         }

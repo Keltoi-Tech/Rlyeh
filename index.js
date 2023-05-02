@@ -1,4 +1,4 @@
-export {kek} from './utils.js';
+export {kek,importStyle} from './utils.js';
 export {HtmlComponent,define,component,trait,cthulhu} from './component.js';
 export {HtmlMeta} from './html-meta.js';
 export {Routing} from './routing.js';
