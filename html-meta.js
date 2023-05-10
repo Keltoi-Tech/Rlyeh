@@ -3,10 +3,4 @@ export class HtmlMeta extends HTMLElement{
         super();
         this.element = this.attachShadow({mode:'closed'});
     }
-
-    /*appendChild(node=new Node){
-        this.element.appendChild(node);
-    }*/
-
-    
 }
