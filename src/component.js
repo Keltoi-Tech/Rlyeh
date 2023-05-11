@@ -79,7 +79,6 @@ export const define=(type,services={})=>{
     }
 }
 
-
 export const component = (func, param = null)=>{
     const name = kek(func.name);
     let elementInstance = customElements.get(name);
