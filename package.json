@@ -1,10 +1,14 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Cthulhu Javascript Library",
-  "main": "index.js",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
   "author": "Keltoi",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "bugs": {
     "email": "devops@keltoi.tech"
   },
@@ -13,7 +17,8 @@
     "url": "https://github.com/Keltoi-Tech/Rlyeh.git"
   },
   "scripts": {
-    "test": "http-server --port 8080 -P http://localhost:8080?"
+    "test": "http-server --port 8080 -P http://localhost:8080?",
+    "build":"rollup -c"
   },
   "keywords": [
     "Cthulhu",
@@ -23,6 +28,8 @@
     "ES6"
   ],
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "rollup": "^2.79.1",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
