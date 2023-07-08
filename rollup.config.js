@@ -1,9 +1,12 @@
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
 export default {
     input:'src/index.js',
     plugins:[
-        terser(),
+        terser({
+            keep_classnames:true,
+            keep_fnames:true
+        })
     ],
     output:[
         {

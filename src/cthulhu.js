@@ -230,3 +230,5 @@ export class Cthulhu{
         );
     }
 }
+
+export const cthulhu=(template={},name='')=>name==''?new Cthulhu(template):new Cthulhu(template,name);
