@@ -1,34 +1,10 @@
 import { cthulhu } from "./cthulhu";
 import { HtmlMeta } from "./html-meta";
 
-const newCss=(css='')=>
-{
-    const sheet = new CSSStyleSheet
-    sheet.replaceSync(css);
-    return sheet;
-}
-
 export class HtmlComponent extends HtmlMeta{
     constructor(template={}){
         super();
 
-        if (!!template.attributes)
-            delete template.attributes;
-
-        if (!!template.inlineSheet){
-            const sheet = newCss(template.inlineSheet);
-            this.element.adoptedStyleSheets=[sheet];
-            delete template.inlineSheet;
-        }
-
-        if (!!template.css){
-            template.css.then(css=>{
-                const sheet = newCss(css);
-                this.element.adoptedStyleSheets=[sheet];
-                delete template.css;
-            })
-        }
-        
         this.root = cthulhu(template);
     }
 
@@ -48,7 +24,9 @@ export class HtmlComponent extends HtmlMeta{
 
     attributeChangedCallback(name,oldValue,newValue){
         if (oldValue!=newValue && !!this.attributes){
-            this.attributes[name](this.root,newValue);
+            this.attributes[name](this.root,newValue)
+            .then(subjects=>subjects.map(sub=>sub.build()))
+            .then(promises=>Promise.all(promises));
         }
     }
 }
