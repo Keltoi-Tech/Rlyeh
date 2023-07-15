@@ -8,3 +8,27 @@ fetch(url+'.css',{
     }
 })
 .then(response=>response.text());
+
+export const buildCss=(css='')=>
+{
+    const sheet = new CSSStyleSheet
+    sheet.replaceSync(css);
+    return sheet;
+}
+
+export const settingValue=async(context,val)=>{
+    context.value = val;
+
+    return [context];
+}
+
+export const settingContent=async(context,val)=>{
+    context.content = val;
+
+    return [context];
+}
+
+export const setting=async(context={},val)=>({
+    context,
+    val    
+});

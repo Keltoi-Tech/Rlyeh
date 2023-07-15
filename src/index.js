@@ -1,4 +1,4 @@
-export {kek,importStyle} from './utils.js';
+export {kek,importStyle,setting,settingValue,settingContent} from './utils.js';
 export {cthulhu} from './cthulhu.js';
 export {trait} from './trait.js';
 export {define} from './define.js';
