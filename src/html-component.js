@@ -8,7 +8,7 @@ export class HtmlComponent extends HtmlMeta{
         this.root = cthulhu(template);
     }
 
-    emmiter(event='',param={}){
+    emitter(event='',param={}){
         this.dispatchEvent(new CustomEvent(event,{
             detail:param
         }))
