@@ -8,11 +8,10 @@ export class HtmlComponent extends HtmlMeta{
         this.root = cthulhu(template);
     }
 
-    emitter(event='',param={}){
-        this.dispatchEvent(new CustomEvent(event,{
-            detail:param
-        }))
-    }
+    emitter=(event='',param={})=>
+        this.dispatchEvent(
+            new CustomEvent(event,{detail:param,bubbles:true})
+        )
 
     connectedCallback(){
         this.root.build(true).then(e=>this.element.appendChild(e))
