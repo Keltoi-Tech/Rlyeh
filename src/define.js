@@ -1,21 +1,20 @@
 import { HtmlComponent } from "./html-component";
 import { buildCss, kek } from "./utils";
 
-export const define=(type)=>{
+export const define=(type,context={})=>{
     const name = kek(type.name);
     if (type.__proto__.name=='HtmlComponent'){
         if (customElements.get(name)===undefined)customElements.define(name,type);
     }
     else if (customElements.get(name)===undefined)
     {
-        let context={}
         const o = type(context);
         const attr = o.attributes;
 
         customElements.define(
             name,
             class extends HtmlComponent{
-                constructor(services){
+                constructor(){
                     super(o.template);
 
                     if (!!o.css){
@@ -23,8 +22,6 @@ export const define=(type)=>{
                         this.element.adoptedStyleSheets=[sheet];
                     }
 
-                    context.me = this;
-                    context.services = services;
                 }       
 
                 static get observedAttributes(){
