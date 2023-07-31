@@ -2,10 +2,8 @@ import { cthulhu } from "./cthulhu";
 import { HtmlMeta } from "./html-meta";
 
 export class HtmlComponent extends HtmlMeta{
-    constructor(template={}){
+    constructor(){
         super();
-
-        this.root = cthulhu(template);
     }
 
     emitter=(event='',param={})=>
