@@ -19,7 +19,7 @@ export class Doom extends Cthulhu{
     }
 
     constructor(me){
-        super(Doom,me,"content","attributes","events","style","hooks")
+        super(Doom,me,"content","attributes","events","styleProps","hooks")
     }
 
     static async $(tag='',me){
@@ -83,10 +83,10 @@ export class Doom extends Cthulhu{
     }
 
     #setStyle= async (node=document.createElement())=>{
-        const styleMap = new Map(Object.entries(this.style))
+        const styleMap = new Map(Object.entries(this.styleProps))
 
-        if (this.#old?.has('style')){
-            const oldStyleMap = new Map(Object.entries(this.#old.get('style')))
+        if (this.#old?.has('styleProps')){
+            const oldStyleMap = new Map(Object.entries(this.#old.get('styleProps')))
 
             await Doom.compare({
                 oldMap:oldStyleMap,
@@ -127,7 +127,7 @@ export class Doom extends Cthulhu{
             switch(prop){
                 case 'attributes':structure.push(this.#setAttributes(e));break;
                 case 'events':structure.push(this.#setEvents(e));break;
-                case 'style':structure.push(this.#setStyle(e));break;
+                case 'styleProps':structure.push(this.#setStyle(e));break;
                 case 'content':structure.push(this.#setContent(e));break;
                 default:{
                     const tag = pascalOrCamelToKebab(prop)
