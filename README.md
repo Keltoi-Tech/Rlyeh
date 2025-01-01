@@ -4,19 +4,13 @@ Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.
 _________________________________________________________________
 =================================================================
 
-Rlyeh is Cthulhu HTML home
+Rlyeh is Cthulhu home!
 
-And he is awaiting your download
+Cthulhu is, in fact, a Design Pattern created by Danilo Da Silva and it's purpose is create an 
+elegant way to write a node architecture based application. 
 
-Cthulhu is, in fact, a Design Pattern created by Danilo Da Silva. 
+So, this is an implementation for a Virtual DOM using Cthulhu approach. It contains methods that allow 
+you use this package as a true javascript SPA library, dismissing the usage of HTML tags (and threfore, HTML files) and building rich javascript components.
 
-This is a Cthulhu implementation for HTML processing through DOM and some 
-methods that allow you use this package as a true javascript SPA library, dismissing
-the usage of HTML tags (and threfore, HTML files) and building rich javascript components.
-
+It's not just one more javascript lib, it's the Cthulhu Power given to man do decent web applications!
 _________________________________________________________________
-
-
-
-
-
