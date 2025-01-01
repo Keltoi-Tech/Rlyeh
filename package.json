@@ -1,7 +1,7 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "1.2.0",
-  "description": "Cthulhu Javascript Library",
+  "version": "3.1.4",
+  "description": "DOM manipulation based on cthulhu node architecture",
   "type": "module",
   "module": "dist/index.js",
   "main": "dist/index.js",
@@ -29,8 +29,9 @@
     "ES6"
   ],
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.3",
-    "http-server": "^14.1.1",
-    "rollup": "^2.79.1"
+    "@keltoi/naming-converting": "^2.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "cthulhu": "^3.1.4",
+    "rollup": "^4.29.1"
   }
 }
