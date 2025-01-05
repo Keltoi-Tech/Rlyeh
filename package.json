@@ -1,6 +1,6 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "3.1.5",
+  "version": "3.1.7",
   "description": "DOM manipulation based on cthulhu node architecture",
   "type": "module",
   "module": "dist/index.js",
@@ -29,9 +29,11 @@
     "ES6"
   ],
   "devDependencies": {
-    "@keltoi/naming-converting": "^2.0.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "cthulhu": "^3.1.4",
     "rollup": "^4.29.1"
+  },
+  "dependencies": {
+    "@keltoi/naming-converting": "^2.0.1",
+    "cthulhu": "^3.1.4"
   }
 }
