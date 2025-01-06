@@ -129,6 +129,7 @@ export class Doom extends Cthulhu{
                 case 'events':structure.push(this.#setEvents(e));break;
                 case 'styleProps':structure.push(this.#setStyle(e));break;
                 case 'content':structure.push(this.#setContent(e));break;
+                case 'hooks':break;
                 default:{
                     const tag = pascalOrCamelToKebab(prop)
                     const isOld = this.#old?.has(prop) ?? false
@@ -168,7 +169,7 @@ export class Doom extends Cthulhu{
         this.#toRemove = true
     }
 
-    async build(name='div'|undefined){
+    async build(name='div'|null){
         if (this.#toRemove) return this
 
         const e = name ? document.createElement(name) : this.#self
