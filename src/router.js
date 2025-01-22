@@ -11,7 +11,7 @@ export class Router{
 
     notFound=()=>({
         build:()=>Doom.$(
-            naming(NotFound),
+            'not-found',
             {
                 h1:{
                     content:'Page Not Found'

@@ -53,13 +53,13 @@ export class Doom extends Cthulhu{
             await Doom.compare({
                 oldMap:this.#old,
                 newMap:attributeMap,
-                set:(key,val)=>node.setAttribute(key,val),
+                set:(key,val)=>node.setAttribute(pascalOrCamelToKebab(key),val),
                 remove:(key)=>{
-                    if (key!='style') node.removeAttribute(key)
+                    if (key!='style') node.removeAttribute(pascalOrCamelToKebab(key))
                 }
             })
         }
-        else attributeMap.forEach((val,attr)=>node.setAttribute(attr,val))
+        else attributeMap.forEach((val,attr)=>node.setAttribute(pascalOrCamelToKebab(attr),val))
     }
 
     #setEvents= async(node=document.createElement())=>{
