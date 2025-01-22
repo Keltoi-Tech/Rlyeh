@@ -1,4 +1,4 @@
-import { Doom, naming } from "cthulhu-rlyeh"
+import { Doom } from "cthulhu-rlyeh"
 
 export class Router{
     #route
