@@ -4,6 +4,24 @@ export class Router{
     #route
     #service
 
+    static App(app=()=>{},service={}){
+        const router = new Router({
+            '/':(s)=>app(s)
+        },service)
+
+        const loader = ()=>{
+            const match = router?.match(window.location.pathname,window.location.search)
+            const div = document.querySelector('#app')
+          
+            div.innerHTML = ''
+            
+            if (match) match.then(view=>view.renderOn(div))
+        }
+
+        document.addEventListener('DOMContentLoaded',loader)
+        window.onpopstate = loader
+    }
+
     constructor(route={},service={},me=()=>{}){
         this.#route = route
         this.#service = service
