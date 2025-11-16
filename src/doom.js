@@ -19,7 +19,7 @@ export class Doom extends Cthulhu{
     }
 
     constructor(me){
-        super(Doom,me,"content","attributes","events","styleProps","hooks")
+        super(Doom,me,"content","attributes","events","styleProps","hooks","nsuri")
     }
 
     static async $(tag='',me){
@@ -129,7 +129,9 @@ export class Doom extends Cthulhu{
                 case 'events':structure.push(this.#setEvents(e));break;
                 case 'styleProps':structure.push(this.#setStyle(e));break;
                 case 'content':structure.push(this.#setContent(e));break;
+                case 'nsuri':this.nsuri=element ;break;
                 case 'hooks':break;
+                
                 default:{
                     const tag = pascalOrCamelToKebab(prop)
                     const isOld = this.#old?.has(prop) ?? false
@@ -172,7 +174,12 @@ export class Doom extends Cthulhu{
     async build(name='div'|null){
         if (this.#toRemove) return this
 
-        const e = name ? document.createElement(name) : this.#self
+        const e = name 
+            ? !!this.nsuri 
+                ?document.createElementNS(this.nsuri,name)
+                :document.createElement(name) 
+            : this.#self
+
         const {self,structure,children} = this.#inner(e)
 
         await Promise.all(structure)
