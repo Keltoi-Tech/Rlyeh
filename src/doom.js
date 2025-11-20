@@ -118,7 +118,7 @@ export class Doom extends Cthulhu{
         else previous.removeFrom(parent)
     }
 
-    #inner=(e)=>{
+    #inner=(e, update = false)=>{
         const self = new Map(Object.entries(this))
         let children=[];
         let structure = [];
@@ -147,18 +147,22 @@ export class Doom extends Cthulhu{
                             element
                             .map((nest,i)=>{
                                 nest.index= i
-                                return nest.isVirgin ? nest.build(tag) : nest.build()
+                                return nest.isVirgin 
+                                    ? nest.build(tag) 
+                                    : update 
+                                        ? nest.build() 
+                                        : nest
                             })
                         )
                     }
                     else if (element instanceof Doom) {
-                        children.push(
-                            element.isVirgin 
-                                ? element.root ?? false
-                                    ?element.build() 
-                                    :element.build(tag) 
-                                : element.build()
-                        )
+                        if (element.isVirgin)
+                            element = element.build(
+                                (element.root ?? false) ? null : tag
+                            )
+                        else if (update) element = element.build()
+
+                        children.push(element)
                     }
                 }
             }
@@ -171,8 +175,10 @@ export class Doom extends Cthulhu{
         this.#toRemove = true
     }
 
-    async build(name='div'|null){
+    async build(name='div'|null, update =false){
         if (this.#toRemove) return this
+
+        if (name==='svg')console.log('build svg')
 
         const e = name 
             ? !!this.nsuri 
@@ -180,7 +186,7 @@ export class Doom extends Cthulhu{
                 :document.createElement(name) 
             : this.#self
 
-        const {self,structure,children} = this.#inner(e)
+        const {self,structure,children} = this.#inner(e, update)
 
         await Promise.all(structure)
 
