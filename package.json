@@ -1,6 +1,6 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "4.0.0",
+  "version": "4.0.2",
   "description": "DOM manipulation based on cthulhu node architecture",
   "type": "module",
   "module": "dist/index.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Keltoi-Tech/Rlyeh.git"
+    "url": "git+https://github.com/Keltoi-Tech/Rlyeh.git"
   },
   "scripts": {
     "test": "npm run build & npm link",
