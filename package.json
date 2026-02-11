@@ -1,6 +1,6 @@
 {
   "name": "cthulhu-rlyeh",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "DOM manipulation based on cthulhu node architecture",
   "type": "module",
   "module": "dist/index.js",

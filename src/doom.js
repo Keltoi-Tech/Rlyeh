@@ -19,7 +19,7 @@ export class Doom extends Cthulhu{
     }
 
     constructor(me){
-        super(Doom,me,"content","attributes","events","styleProps","hooks","nsuri")
+        super(Doom,me,"content","attributes","events","styleProps","hooks","nsuri","ai")
     }
 
     static async $(tag='',me){
@@ -130,7 +130,8 @@ export class Doom extends Cthulhu{
                 case 'styleProps':structure.push(this.#setStyle(e));break;
                 case 'content':structure.push(this.#setContent(e));break;
                 case 'nsuri':this.nsuri=element ;break;
-                case 'hooks':break;
+                case 'hooks': break;
+                case 'ai': break;
                 
                 default:{
                     const tag = pascalOrCamelToKebab(prop)
