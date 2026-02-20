@@ -40,7 +40,7 @@ export class Doom extends Cthulhu{
     get isDeleted(){ return this.#toRemove } //if the element has been deleted
 
     constructor(me){
-        super(Doom,me,"content","attributes","events","styleProps","hooks","nsuri","ai")
+        super(Doom,me,"content","attributes","events","styleProps","props","nsuri","ai")
     }
 
     static async $(tag='',me){
@@ -166,7 +166,7 @@ export class Doom extends Cthulhu{
                 case 'content':structure.push(this.#setContent(e));break;
                 case 'nsuri':this.nsuri=element ;break;
                 case 'ai': this.#addAiComment(element,e);break;
-                case 'hooks': break;
+                case 'props': break;
                 
                 
                 default:{
