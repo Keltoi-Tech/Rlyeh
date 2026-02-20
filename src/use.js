@@ -13,6 +13,12 @@ class NodeWrapper {
         return this
     }
 
+    cleanMany(children=(n=new Doom())=>[new Doom()]){
+        children(this.#self).forEach(child=>child.delete())
+
+        return this
+    }
+
     update(change=(n=new Doom())=>{}){
         change(this.#self)
 
