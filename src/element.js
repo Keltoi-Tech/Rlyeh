@@ -9,24 +9,36 @@ export class BaseElement extends HTMLElement{
         if (oldValue === newValue) return
 
         this[name] = newValue
+
     }
 }
 
 export class CthulhuElement extends BaseElement{
-    #template
-    constructor(template = new Doom()){
+    #dom
+    
+    constructor({
+        doom = async () => new Doom(), 
+        css= [Promise.resolve(new CSSStyleSheet)]
+    }){
         super()
 
-        this.#template = template
+        this.#dom = this.attachShadow({mode:'open'})
 
-        const shadow = this.attachShadow({mode:'open'})
+        const render = () => doom().then(d=>d.renderOn(this.#dom))
 
-        template.renderOn(shadow)
+        if (!!css)
+            Promise
+                .all(css)
+                .then(sheets=>
+                    this
+                        .#dom
+                        .adoptedStyleSheets = sheets
+                )
+                .then(render)
+        else
+            render()
     }
 
-    get template(){
-        return this.#template
-    }
 }
 
 export class TextElement extends BaseElement{

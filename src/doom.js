@@ -174,12 +174,6 @@ export class Doom extends Cthulhu{
                     const isOld = this.#old?.has(prop) ?? false
 
                     if (element instanceof Array){
-                        /*if (isOld){
-                            const previous = this.#old.get(prop)
-
-                            this.#dealWithList(e,element,previous)
-                        }*/
-
                         children = children
                             .concat(
                                 element
@@ -215,6 +209,11 @@ export class Doom extends Cthulhu{
                         })
 
                         children.push(element)
+                    } else {
+                        const newOne = new Doom(element)
+                        this[tag] = newOne
+
+                        children.push(newOne.build(tag))
                     }
                 }
             }
@@ -244,19 +243,12 @@ export class Doom extends Cthulhu{
 
         const childList = await Promise.all(children)
 
-        childList.forEach(
-            child=>{ 
-                /*if (child.isDeleted){
-                    child.removeFrom(e)
+        childList
+            .filter(child=>!child.isRendered)
+            .forEach(child=>child.renderOn(e))
 
-                    return
-                } */
-
-                if (!child.isRendered) child.renderOn(e)
-            }
-        )
-
-        garbage.forEach(dispose=>dispose())
+        garbage
+            .forEach(dispose=>dispose())
         
         this.#self = e;
         

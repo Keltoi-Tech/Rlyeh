@@ -1,0 +1,1 @@
+export const css = (text)=>new CSSStyleSheet().replace(text)
