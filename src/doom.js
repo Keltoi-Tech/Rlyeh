@@ -223,6 +223,7 @@ export class Doom extends Cthulhu{
     }
 
     delete(){
+        this.#rendered = false
         this.#toRemove = true
     }
 

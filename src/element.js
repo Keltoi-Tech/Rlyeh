@@ -15,6 +15,7 @@ export class BaseElement extends HTMLElement{
 
 export class CthulhuElement extends BaseElement{
     #dom
+    #doom
     
     constructor({
         doom = async () => new Doom(), 
@@ -24,7 +25,12 @@ export class CthulhuElement extends BaseElement{
 
         this.#dom = this.attachShadow({mode:'open'})
 
-        const render = () => doom().then(d=>d.renderOn(this.#dom))
+        const render = () => doom()
+            .then(d=>{
+                d.renderOn(this.#dom)
+                
+                this.#doom = d
+            })
 
         if (!!css)
             Promise
@@ -38,6 +44,8 @@ export class CthulhuElement extends BaseElement{
         else
             render()
     }
+
+    get doom(){ return this.#doom }
 
 }
 

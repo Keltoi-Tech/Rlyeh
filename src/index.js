@@ -5,4 +5,5 @@ export { css } from './css'
 export { naming }   from './naming' 
 export { changing } from './changing'
 export { use } from './use'
+export { routerSlot } from './router-slot'
 

@@ -4,22 +4,27 @@ export class Router{
     #route
     #service
 
-    static App(app=()=>{},service={}){
+    static App({
+        app=()=>{},
+        service={}
+    }){
         const router = new Router({
             '/':(s)=>app(s)
         },service)
 
         const loader = ()=>{
-            const match = router?.match(window.location.pathname,window.location.search)
-            const div = document.querySelector('#app')
+            const match = router?.matchUrl()
+
+            document.body.innerHTML = ''
           
-            div.innerHTML = ''
-            
-            if (match) match.then(view=>view.renderOn(div))
+            if (match) match
+                .then(view=>view.renderOn(document.body))
         }
 
         document.addEventListener('DOMContentLoaded',loader)
-        window.onpopstate = loader
+        window.addEventListener('popstate',(event)=>{
+            if (event.state) loader()
+        })
     }
 
     constructor(route={},service={},me=()=>{}){
@@ -27,19 +32,21 @@ export class Router{
         this.#service = service
     }
 
-    notFound=()=>({
-        build:()=>Doom.$(
-            'not-found',
-            {
-                h1:{
-                    content:'Page Not Found'
-                },
-                p:{
-                    content:'404'
-                }
+    get isHome(){ return window.location.pathname==='/' }
+
+    matchUrl = () => this.match(window.location.pathname,window.location.search)
+
+    notFound=()=>Doom.$(
+        'not-found',
+        {
+            h1:{
+                content:'Page Not Found'
+            },
+            p:{
+                content:'404'
             }
-        )
-    })
+        }
+    )
 
     #matching=(link='')=>{
         for (const [r,v] of Object.entries(this.#route)){
