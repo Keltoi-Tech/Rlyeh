@@ -183,8 +183,6 @@ export class Doom extends Cthulhu{
                                             this[tag][i] = nest
                                         }
 
-                                        nest.index= i
-
                                         if (nest.isVirgin) return nest.build(tag)
 
                                         if (update && !nest.isDeleted) return nest.build()
