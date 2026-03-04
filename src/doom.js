@@ -51,6 +51,10 @@ export class Doom extends Cthulhu{
         return doomInstance;
     }
 
+    static template(me={}){ 
+        return Doom.$('template',me)
+    }
+
     static async compare({
         oldMap=new Map(),
         newMap=new Map(),
@@ -140,18 +144,6 @@ export class Doom extends Cthulhu{
         } else node.innerHTML = this.content
     }
 
-    #dealWithList=(parent,element=[],previous={}|[])=>{
-        if (previous instanceof Array){
-            const indexes = element.map(e=>e.index ?? -1)
-
-            previous.forEach(prev=>{
-                if (!indexes.includes(prev.index))
-                    prev.removeFrom(parent)
-            })
-        }
-        else previous.removeFrom(parent)
-    }
-
     #inner=(e, update = false)=>{
         const self = new Map(Object.entries(this))
         let children=[];
@@ -171,7 +163,6 @@ export class Doom extends Cthulhu{
                 
                 default:{
                     const tag = pascalOrCamelToKebab(prop)
-                    const isOld = this.#old?.has(prop) ?? false
 
                     if (element instanceof Array){
                         children = children
@@ -225,16 +216,20 @@ export class Doom extends Cthulhu{
         this.#toRemove = true
     }
 
+    #raiseElement(name){
+        if (!name) return this.#self
+
+        const element = this.nsuri 
+            ?document.createElementNS(this.nsuri,name)
+            :document.createElement(name)
+
+        return  name==='template' ? element.content : element
+    }
+
     async build(name='div'|null, update =false){
         if (this.#toRemove) return this
 
-        if (name==='svg')console.log('build svg')
-
-        const e = name 
-            ? !!this.nsuri 
-                ?document.createElementNS(this.nsuri,name)
-                :document.createElement(name) 
-            : this.#self
+        const e = this.#raiseElement(name) 
 
         const {children, structure, garbage} = this.#inner(e, update)
 
@@ -252,6 +247,7 @@ export class Doom extends Cthulhu{
         this.#self = e;
         
         const oldBoy = cloneByEntry(this)
+
         this.#old = new Map(Object.entries(oldBoy))
 
         return this;
@@ -264,5 +260,9 @@ export class Doom extends Cthulhu{
     renderOn(parent=document.createElement()){
         parent.appendChild(this.#self)
         this.#rendered = true
+    }
+
+    appendChild(child = new Doom()){
+        child.renderOn(this.#self)
     }
 }
