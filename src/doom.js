@@ -11,12 +11,12 @@ const cloneByEntry = (obj) => {
             : v 
 
     Object
-    .entries(obj)
-    .forEach(([key, value]) => 
-        copy[key] = value instanceof Array 
-            ? value.map(isObjectOrValue) 
-            : isObjectOrValue(value)
-    );
+        .entries(obj)
+        .forEach(([key, value]) => 
+            copy[key] = value instanceof Array 
+                ? value.map(isObjectOrValue) 
+                : isObjectOrValue(value)
+        );
 
     return copy
 }
@@ -264,5 +264,10 @@ export class Doom extends Cthulhu{
 
     appendChild(child = new Doom()){
         child.renderOn(this.#self)
+    }
+
+    fire(event = new CustomEvent()){
+
+        this.#self.dispatchEvent(event)
     }
 }
