@@ -176,7 +176,7 @@ export class Doom extends Cthulhu{
 
                                         if (nest.isVirgin) return nest.build(tag)
 
-                                        if (update && !nest.isDeleted) return nest.build()
+                                        if (update && !nest.isDeleted) return nest.build(null,true)
                                         else if (nest.isDeleted) garbage.push(()=> {
                                             nest.removeFrom(e)
                                             this[tag].splice(i,1)
@@ -191,7 +191,7 @@ export class Doom extends Cthulhu{
                             element = element.build(
                                 (element.root ?? false) ? null : tag
                             )
-                        else if (update && !element.isDeleted) element = element.build()
+                        else if (update && !element.isDeleted) element = element.build(null,true)
                         else if (element.isDeleted) garbage.push(()=> {
                             element.removeFrom(e)
                             delete this[tag]
