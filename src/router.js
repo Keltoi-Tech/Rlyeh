@@ -1,33 +1,21 @@
+
 import { Doom } from "./doom"
+import { routerSlot } from "./router-slot"
 
 export class Router{
     #route
 
-    static App({app=()=>{}}){
-        const router = new Router({
-            '/':(s)=>app(s)
-        })
-
-        const loader = ()=>{
-            const match = router?.matchUrl()
-
-            document.body.innerHTML = ''
-          
-            if (match) match
-                .then(view=>view.renderOn(document.body))
-        }
-
-        document.addEventListener('DOMContentLoaded',loader)
+    static App(router = new Router(),update=(child)=>{}){
         window.addEventListener('popstate',(event)=>{
-            if (event.state) loader()
+            if (event.state) Router
+                .go('browser',router)
+                .then(update);
         })
     }
 
     constructor(route={}){
         this.#route = route
     }
-
-    get isHome(){ return window.location.pathname==='/' }
 
     matchUrl = () => this.match(window.location.pathname,window.location.search)
 
@@ -103,9 +91,11 @@ export class Router{
     }
 
     static go(url='',router = new Router()){
-        const [link,search] = url.split('?')
+        const [link,search] = url.split('?');
 
-        const match = router.matchUrl(link,search)
+        const match = url==='browser'
+            ?  router.matchUrl() 
+            :  router.match(link,search);
 
         return (match instanceof Router) ? Router.go(url,match) : match
     }
