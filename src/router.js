@@ -2,15 +2,11 @@ import { Doom } from "./doom"
 
 export class Router{
     #route
-    #service
 
-    static App({
-        app=()=>{},
-        service={}
-    }){
+    static App({app=()=>{}}){
         const router = new Router({
             '/':(s)=>app(s)
-        },service)
+        })
 
         const loader = ()=>{
             const match = router?.matchUrl()
@@ -27,9 +23,8 @@ export class Router{
         })
     }
 
-    constructor(route={},service={},me=()=>{}){
+    constructor(route={}){
         this.#route = route
-        this.#service = service
     }
 
     get isHome(){ return window.location.pathname==='/' }
@@ -74,41 +69,44 @@ export class Router{
             const linkTokens = link.split('/')
             const routeTokens = match.route.split('/')
 
-            const currentParams = routeTokens.reduce((p,a,i)=>{
-                if (match.paramSearch.test(a)) {
-                    const param = decodeURI(linkTokens[i])
-                    const numParam = Number.parseFloat(param)
+            const params = routeTokens
+                .reduce((p,a,i)=>{
+                    if (match.paramSearch.test(a)) {
+                        const param = decodeURI(linkTokens[i])
+                        const numParam = Number.parseFloat(param)
 
-                    p[a.replace(':','')] = Number.isNaN(numParam) ? param : numParam
-                }
-
-                return p
-            },{})
-
-            if (search!=''){
-                const query = search
-                .replace('?','')
-                .split('&')
-                .reduce((p,a)=>{
-                    const [key,value] = a.split('=')
-
-                    p[key]=value
+                        p[a.replace(':','')] = Number.isNaN(numParam) ? param : numParam
+                    }
 
                     return p
                 },{})
 
-                this.#service = {...this.#service,...{query}}
-            }
+            const query = (search==='')
+                ?{}
+                :search
+                    .replace('?','')
+                    .split('&')
+                    .reduce((p,a)=>{
+                        const [key,value] = a.split('=')
 
-            const params = {...this.#service.params,...currentParams}
+                        p[key]=value
 
-            const service = {...this.#service,...{params},link}
+                        return p
+                    },{})
 
             history.pushState({},'',destination)   
 
-            return match.value(service)
+            return match.value({query,params})
         }
 
         return this.notFound()
+    }
+
+    static go(url='',router = new Router()){
+        const [link,search] = url.split('?')
+
+        const match = router.matchUrl(link,search)
+
+        return (match instanceof Router) ? Router.go(url,match) : match
     }
 }
