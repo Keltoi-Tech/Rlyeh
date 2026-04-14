@@ -267,7 +267,14 @@ export class Doom extends Cthulhu{
     }
 
     fire(event = new CustomEvent()){
-
         this.#self.dispatchEvent(event)
+    }
+
+    focus(){
+        this.#self.focus()
+    }
+
+    blur(){ 
+        this.#self.blur()
     }
 }
