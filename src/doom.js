@@ -1,5 +1,12 @@
 import { Cthulhu } from "cthulhu";
 import { pascalOrCamelToKebab } from '@keltoi/naming-converting';
+import tagBuffer from "./tag-buffer";
+
+const tagBufferGetAndPush = (prop='') =>{
+    if (!tagBuffer[prop]) tagBuffer[prop] = pascalOrCamelToKebab(prop)
+
+    return tagBuffer[prop]
+}
 
 const cloneByEntry = (obj) => {
     const copy = {}
@@ -162,7 +169,7 @@ export class Doom extends Cthulhu{
                 
                 
                 default:{
-                    const tag = pascalOrCamelToKebab(prop)
+                    const tag = tagBufferGetAndPush(prop)
 
                     if (element instanceof Array){
                         children = children
@@ -171,7 +178,7 @@ export class Doom extends Cthulhu{
                                     .map((nest,i)=>{
                                         if (!(nest instanceof Doom)) {
                                             nest = new Doom(nest)
-                                            this[tag][i] = nest
+                                            this[prop][i] = nest
                                         }
 
                                         if (nest.isVirgin) return nest.build(tag)
@@ -179,7 +186,7 @@ export class Doom extends Cthulhu{
                                         if (update && !nest.isDeleted) return nest.build(null,true)
                                         else if (nest.isDeleted) garbage.push(()=> {
                                             nest.removeFrom(e)
-                                            this[tag].splice(i,1)
+                                            this[prop].splice(i,1)
                                         })
 
                                         return nest
@@ -194,13 +201,13 @@ export class Doom extends Cthulhu{
                         else if (update && !element.isDeleted) element = element.build(null,true)
                         else if (element.isDeleted) garbage.push(()=> {
                             element.removeFrom(e)
-                            delete this[tag]
+                            delete this[prop]
                         })
 
                         children.push(element)
                     } else {
                         const newOne = new Doom(element)
-                        this[tag] = newOne
+                        this[prop] = newOne
 
                         children.push(newOne.build(tag))
                     }
