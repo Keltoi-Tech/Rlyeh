@@ -94,7 +94,12 @@ export class Doom extends Cthulhu{
             await Doom.compare({
                 oldMap,
                 newMap,
-                set:(key,val)=>node.setAttribute(pascalOrCamelToKebab(key),val),
+                set:(key,val)=>{
+                    const name = pascalOrCamelToKebab(key)
+
+                    if (name==='value') node.value = val
+                    else node.setAttribute(name,val)
+                },
                 remove:(key)=>{
                     if (key!='style') node.removeAttribute(pascalOrCamelToKebab(key))
                 }

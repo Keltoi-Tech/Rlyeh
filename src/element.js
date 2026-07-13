@@ -16,6 +16,9 @@ export class BaseElement extends HTMLElement{
 export class CthulhuElement extends BaseElement{
     #dom
     #doom
+    #render
+    #template={}
+    params={}
     
     constructor({
         doom = async () => new Doom(), 
@@ -25,28 +28,46 @@ export class CthulhuElement extends BaseElement{
 
         this.#dom = this.attachShadow({mode:'open'})
 
-        const render = () => doom()
+        this.#template = {
+            doom:doom,
+            css:css
+        }
+
+        const render = () => doom(this.params)
             .then(d=>{
                 d.renderOn(this.#dom)
                 
                 this.#doom = d
             })
 
-        if (!!css)
-            Promise
-                .all(css)
-                .then(sheets=>
-                    this
-                        .#dom
-                        .adoptedStyleSheets = sheets
-                )
-                .then(render)
-        else
-            render()
+        this.#render = 
+            (!!css)
+                ?()=>Promise
+                    .all(css)
+                    .then(sheets=>
+                        this
+                            .#dom
+                            .adoptedStyleSheets = sheets
+                    )
+                    .then(render)
+                :render
     }
+
+
 
     get doom(){ return this.#doom }
 
+    connectedCallback(){
+        this.#render()
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) return
+
+        this.params[name] = newValue
+
+        if (this.doom) this.doom.props[name]()
+    }
 }
 
 export class TextElement extends BaseElement{
